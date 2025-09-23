@@ -106,7 +106,7 @@ function App() {
   };
 
   const updateProduct = async (id, name) => {
-    const updated = prompt("Enter new name:", name);
+    const updated = prompt("Nhập tên mới:", name);
     if (updated) {
       await API.put(`/products/${id}`, { name: updated });
       fetchProducts();
@@ -120,13 +120,13 @@ function App() {
 
   return (
   <div style={styles.container}>
-    <h1 style={styles.header}>CRUD Demo (React + Express)</h1>
+    <h1 style={styles.header}>CRUD Demo</h1>
     <div style={styles.inputContainer}>
       <input
         style={styles.input}
         value={newName}
         onChange={(e) => setNewName(e.target.value)}
-        placeholder="Enter new product"
+        placeholder="Nhập sản phẩm mới"
       />
       <button style={styles.addButton} onClick={addProduct}>
         Add
