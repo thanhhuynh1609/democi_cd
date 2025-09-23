@@ -29,10 +29,20 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           docker-compose build
           docker-compose push
 
+      # 🔥 Copy docker-compose.yml lên server
+      - name: Copy docker-compose.yml to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "~/app"
+
+      # 🔥 Deploy trên server
       - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -40,6 +50,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            cd ~/app
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
             docker-compose pull
             docker-compose down
