@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://backend:3000" // chỉnh sang http://backend:3000 trong docker-compose
+  baseURL: ""  // Hoặc "/" – proxy sẽ tự động forward /products tới backend
 });
 
 export default API;
