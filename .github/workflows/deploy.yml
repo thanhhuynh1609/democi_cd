@@ -1,4 +1,4 @@
-name: Demo CI/CD Pipeline
+name: Fullstack CI/CD Pipeline
 
 on:
   push:
@@ -22,22 +22,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Backend + Frontend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-cicd:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/demo-cicd:latest
+          docker-compose build
+          docker-compose push
 
-      - name: Deploy to AWS EC2
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/demo-cicd:latest
-            docker rm -f demo-cicd || true
-            docker run -d -p 5000:3000 --name demo-cicd ${{ secrets.DOCKER_USERNAME }}/demo-cicd:latest
-
-            # comment cho vui
-            # comment cho vui
-
+            cd ~/demo-crud
+            echo "${{ secrets.DOCKER_COMPOSE_FILE }}" > docker-compose.yml
+            docker-compose pull
+            docker-compose up -d --force-recreate
