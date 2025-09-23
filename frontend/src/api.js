@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: ""  // Hoặc "/" – proxy sẽ tự động forward /products tới backend
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000"
 });
 
 export default API;
