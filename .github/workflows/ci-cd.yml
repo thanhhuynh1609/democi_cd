@@ -31,7 +31,7 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          docker-compose build
+          docker-compose build --no-cache 
           docker-compose push
 
       # 🔥 Copy docker-compose.yml lên server
